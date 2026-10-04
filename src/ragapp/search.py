@@ -23,11 +23,16 @@ def answer(question, source=None, session_id=None, tenant=None):
             raise ValueError("unknown source")
     if tenant:
         corpus = [s for s in corpus if s[0].startswith(tenant) or tenant in s[0]]
-    history = SESSIONS.setdefault(session_id or "_", [])
-    q = question + " " + " ".join(history[-3:])
+    history = []
+    if session_id:
+        history = SESSIONS.setdefault(session_id, [])
+        q = question + " " + " ".join(history[-3:])
+    else:
+        q = question
     scores = bm25(q, [t for _, t in corpus])
     ranked = sorted(({"source": n, "text": t, "score": sc} for (n, t), sc in zip(corpus, scores)), key=lambda x: -x["score"])
     best = ranked[0]
-    history.append(question)
+    if session_id:
+        history.append(question)
     ok = best["score"] >= 1
     return {"answered": ok, "answer": best["text"] if ok else "No passage shares enough terms.", "citation": best["source"] if ok else None, "passages": ranked[:5]}
