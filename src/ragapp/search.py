@@ -29,5 +29,5 @@ def answer(question, source=None, session_id=None, tenant=None):
     ranked = sorted(({"source": n, "text": t, "score": sc} for (n, t), sc in zip(corpus, scores)), key=lambda x: -x["score"])
     best = ranked[0]
     history.append(question)
-    ok = best["score"] >= 2
+    ok = best["score"] >= 1
     return {"answered": ok, "answer": best["text"] if ok else "No passage shares enough terms.", "citation": best["source"] if ok else None, "passages": ranked[:5]}
