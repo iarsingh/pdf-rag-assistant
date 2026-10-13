@@ -1,5 +1,12 @@
 # PDF RAG Assistant
 
+## Overview
+
+A small retrieval assistant for PDF text. The text is split into chunks, the chunks are ranked against a question with a local BM25-style hashed overlap that stands in for embeddings, and `POST /ask` returns the best answer with a citation to its source chunk. No hosted model is called, so retrieval stays local and repeatable.
+
+- **Built with:** Python, pytest, GitHub Actions
+- **Scope:** Laptop lab with no hosted model; cluster apply stays false until a human approves, and production apply is refused.
+
 <!-- project-guide:start -->
 ## Project guide
 
